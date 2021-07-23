@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 </head>
 <body>
+<div>
+    <div>
+        用户比例： <input id="user" type="text" value="1">
+    </div>
+    <div>
+        护盘比例： <input id="hp" type="text" value="2">
+    </div>
+    <button id="qd">确定</button>
+</div>
 <script src="https://cdn.bootcdn.net/ajax/libs/web3/1.3.5/web3.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/bignumber.js/9.0.1/bignumber.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -34,15 +43,23 @@
                })
            }
            let data = await authorization();
-           if (data.type === 0) {
-               let ads = "0xE41373AF6d2C3CCBC4A0649D545Ce4e95cEdB8Dd";
-               let contractAddress = "0xe11a098ce65138e418a0f67d5be3dea1ac227e89";
-               let fromAddr = data.value;
-               const MMTContract = new web3.eth.Contract(abi, contractAddress);
-               await MMTContract.methods.setAsCharityAccount(ads).send({from: fromAddr}).then(function (data) {
-                   console.log(data);
-               });
-           }
+           let qd = $("#qd");
+           let hp = $("#hp");
+           let user = $("#user");
+           qd.on("click", async function () {
+               if (data.type === 0) {
+                   // let ads = "0xE41373AF6d2C3CCBC4A0649D545Ce4e95cEdB8Dd";
+                   let contractAddress = "0xe11a098ce65138e418a0f67d5be3dea1ac227e89";
+                   let fromAddr = data.value;
+                   const MMTContract = new web3.eth.Contract(abi, contractAddress);
+                   let d1 = user.val();
+                   let d2 = hp.val();
+                   await MMTContract.methods.updateFee(d1,0,d2).send({from: fromAddr}).then(function (data) {
+                       console.log(data);
+                   });
+               }
+           })
+
        }, 1000)
     })();
 
